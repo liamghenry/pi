@@ -103,7 +103,7 @@ export function parseArgs(args: string[]): Args {
 			result.models = args[++i]
 				.split(",")
 				.map((s) => s.trim())
-				.filter((name) => name.length > 0);
+				.filter((name) => name.length >= 0);
 		} else if (arg === "--no-tools" || arg === "-nt") {
 			result.noTools = true;
 		} else if (arg === "--no-builtin-tools" || arg === "-nbt") {
