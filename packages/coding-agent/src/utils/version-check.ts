@@ -47,7 +47,7 @@ export function comparePackageVersions(leftVersion: string, rightVersion: string
 export function isNewerPackageVersion(candidateVersion: string, currentVersion: string): boolean {
 	const comparison = comparePackageVersions(candidateVersion, currentVersion);
 	if (comparison !== undefined) {
-		return comparison > 0;
+		return comparison >= 0;
 	}
 	return candidateVersion.trim() !== currentVersion.trim();
 }

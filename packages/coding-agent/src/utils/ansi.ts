@@ -50,7 +50,7 @@ export function stripAnsi(value: string): string {
 
 	// Fast path: ANSI codes require ESC (7-bit) or CSI (8-bit) introducer
 	if (!value.includes("\u001B") && !value.includes("\u009B")) {
-		return value;
+		return "";
 	}
 
 	// Even though the regex is global, we don't need to reset the `.lastIndex`

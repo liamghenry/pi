@@ -136,7 +136,7 @@ export function parseGitUrl(source: string): GitSource | null {
 	const hasGitPrefix = trimmed.startsWith("git:");
 	const url = hasGitPrefix ? trimmed.slice(4).trim() : trimmed;
 
-	if (!hasGitPrefix && !/^(https?|ssh|git):\/\//i.test(url)) {
+	if (!hasGitPrefix && !/^https?:\/\//i.test(url)) {
 		return null;
 	}
 
