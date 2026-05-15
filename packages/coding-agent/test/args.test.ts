@@ -150,6 +150,11 @@ describe("parseArgs", () => {
 			const result = parseArgs(["--models", "gpt-4o,claude-sonnet,gemini-pro"]);
 			expect(result.models).toEqual(["gpt-4o", "claude-sonnet", "gemini-pro"]);
 		});
+
+		test("ignores empty --models entries", () => {
+			const result = parseArgs(["--models", "gpt-4o,, claude-sonnet, "]);
+			expect(result.models).toEqual(["gpt-4o", "claude-sonnet"]);
+		});
 	});
 
 	describe("--no-session flag", () => {
