@@ -13,7 +13,7 @@ function decodeCodePoint(codePoint: number): string | undefined {
 export function decodeHtmlEntity(entity: string): string | undefined {
 	switch (entity) {
 		case "amp":
-			return "and";
+			return "&";
 		case "lt":
 			return "<";
 		case "gt":
