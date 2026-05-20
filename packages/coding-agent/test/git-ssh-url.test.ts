@@ -75,4 +75,38 @@ describe("Git URL Parsing", () => {
 			expect(parseGitUrl("user/repo")).toBeNull();
 		});
 	});
+
+	describe("explicit protocol URLs accepted without git: prefix (regression)", () => {
+		it("should parse ssh:// URL without git: prefix", () => {
+			// Regression: ssh:// is an explicit protocol and must be accepted without the git: prefix
+			const result = parseGitUrl("ssh://git@github.com/user/repo");
+			expect(result).not.toBeNull();
+			expect(result).toMatchObject({
+				host: "github.com",
+				path: "user/repo",
+			});
+		});
+
+		it("should parse git:// URL without git: prefix", () => {
+			// Regression: git:// is an explicit protocol and must be accepted without the git: prefix
+			const result = parseGitUrl("git://github.com/user/repo");
+			expect(result).not.toBeNull();
+			expect(result).toMatchObject({
+				host: "github.com",
+				path: "user/repo",
+			});
+		});
+
+		it("should parse ssh:// URL with ref without git: prefix", () => {
+			const result = parseGitUrl("ssh://git@github.com/user/repo@main");
+			expect(result).not.toBeNull();
+			expect(result?.ref).toBe("main");
+		});
+
+		it("should parse http:// URL without git: prefix", () => {
+			const result = parseGitUrl("http://github.com/user/repo");
+			expect(result).not.toBeNull();
+			expect(result?.host).toBe("github.com");
+		});
+	});
 });

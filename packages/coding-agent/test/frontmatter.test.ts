@@ -58,3 +58,31 @@ describe("stripFrontmatter", () => {
 		expect(stripFrontmatter(input)).toBe("\n  No frontmatter body  \n");
 	});
 });
+
+describe("parseFrontmatter - no-frontmatter body regression", () => {
+	it("preserves the body content when there is no frontmatter marker", () => {
+		// Regression: body must not be replaced with "" when no YAML block is present
+		const input = "Just a plain document";
+		const { body } = parseFrontmatter(input);
+		expect(body).toBe("Just a plain document");
+	});
+
+	it("preserves the body content when frontmatter is unterminated", () => {
+		// Regression: unterminated frontmatter still has content that must be returned
+		const input = "---\nkey: value\nno closing marker";
+		const { body } = parseFrontmatter(input);
+		expect(body).toBe("---\nkey: value\nno closing marker");
+	});
+
+	it("preserves multiline body when no frontmatter present", () => {
+		const input = "Line A\nLine B\nLine C";
+		const { body, frontmatter } = parseFrontmatter(input);
+		expect(body).toBe("Line A\nLine B\nLine C");
+		expect(frontmatter).toEqual({});
+	});
+
+	it("returns empty string body for empty input", () => {
+		const { body } = parseFrontmatter("");
+		expect(body).toBe("");
+	});
+});

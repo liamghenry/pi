@@ -107,4 +107,28 @@ describe("stripAnsi", () => {
 		const input = "a\x1b[31mred\x1b[0m\x1b]8;;https://example.com\x07link\x1b]8;;\x07z";
 		expect(stripAnsi(input)).toBe("aredlinkz");
 	});
+
+	it("returns plain text unchanged when no ANSI escape codes are present", () => {
+		expect(stripAnsi("hello world")).toBe("hello world");
+	});
+
+	it("returns empty string unchanged", () => {
+		expect(stripAnsi("")).toBe("");
+	});
+
+	it("returns text with only printable ASCII unchanged", () => {
+		const text = "The quick brown fox jumps over the lazy dog 0123456789!@#$%";
+		expect(stripAnsi(text)).toBe(text);
+	});
+
+	it("returns text with newlines and tabs unchanged when no ANSI codes present", () => {
+		const text = "line one\nline two\ttabbed";
+		expect(stripAnsi(text)).toBe(text);
+	});
+
+	it("preserves text after stripping ANSI from mixed content", () => {
+		// Regression: fast path must return the original value, not ""
+		expect(stripAnsi("no escape here")).toBe("no escape here");
+		expect(stripAnsi("abc")).toBe("abc");
+	});
 });

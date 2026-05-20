@@ -33,6 +33,31 @@ describe("version checks", () => {
 		expect(isNewerPackageVersion("0.70.6", "0.70.5")).toBe(true);
 	});
 
+	it("isNewerPackageVersion returns false for identical versions", () => {
+		// Regression: equal version must NOT be considered newer (comparison === 0 is not > 0)
+		expect(isNewerPackageVersion("1.0.0", "1.0.0")).toBe(false);
+		expect(isNewerPackageVersion("0.0.0", "0.0.0")).toBe(false);
+		expect(isNewerPackageVersion("2.5.3", "2.5.3")).toBe(false);
+	});
+
+	it("isNewerPackageVersion returns true only for strictly greater version", () => {
+		expect(isNewerPackageVersion("1.0.1", "1.0.0")).toBe(true);
+		expect(isNewerPackageVersion("1.1.0", "1.0.9")).toBe(true);
+		expect(isNewerPackageVersion("2.0.0", "1.9.9")).toBe(true);
+	});
+
+	it("isNewerPackageVersion returns false for older candidate version", () => {
+		expect(isNewerPackageVersion("0.9.9", "1.0.0")).toBe(false);
+		expect(isNewerPackageVersion("1.0.0", "1.0.1")).toBe(false);
+	});
+
+	it("isNewerPackageVersion handles pre-release versions correctly", () => {
+		// Stable > pre-release of same patch
+		expect(isNewerPackageVersion("1.0.0", "1.0.0-alpha")).toBe(true);
+		// Pre-release < stable
+		expect(isNewerPackageVersion("1.0.0-alpha", "1.0.0")).toBe(false);
+	});
+
 	it("returns only newer versions", async () => {
 		const fetchMock = vi.fn(async () => Response.json({ version: "1.2.3" }));
 		vi.stubGlobal("fetch", fetchMock);
