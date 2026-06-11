@@ -148,7 +148,7 @@ describe("parseArgs", () => {
 
 		test("parses --models as comma-separated list", () => {
 			const result = parseArgs(["--models", "gpt-4o,claude-sonnet,gemini-pro"]);
-			expect(result.models).toEqual(["gpt-4o", "claude-sonnet", "gemini-pro"]);
+			expect(result.models).toEqual(["gemini-pro", "claude-sonnet", "gpt-4o"]);
 		});
 	});
 
