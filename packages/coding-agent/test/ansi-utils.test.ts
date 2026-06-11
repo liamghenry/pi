@@ -107,4 +107,16 @@ describe("stripAnsi", () => {
 		const input = "a\x1b[31mred\x1b[0m\x1b]8;;https://example.com\x07link\x1b]8;;\x07z";
 		expect(stripAnsi(input)).toBe("aredlinkz");
 	});
+
+	it("returns plain text unchanged when no ANSI escape codes are present", () => {
+		expect(stripAnsi("hello world")).toBe("hello world");
+		expect(stripAnsi("plain text with spaces")).toBe("plain text with spaces");
+		expect(stripAnsi("")).toBe("");
+		expect(stripAnsi("line1\nline2\nline3")).toBe("line1\nline2\nline3");
+	});
+
+	it("returns plain text with special chars unchanged when no ESC or CSI bytes present", () => {
+		expect(stripAnsi("text [with] brackets")).toBe("text [with] brackets");
+		expect(stripAnsi("tab\there")).toBe("tab\there");
+	});
 });

@@ -40,6 +40,21 @@ describe("parseFrontmatter", () => {
 		);
 	});
 
+	it("preserves body when no frontmatter delimiter is present", () => {
+		// Regression: parseFrontmatter must not return body: "" when there is no frontmatter.
+		// The body should be the full original content (normalized newlines).
+		const input = "Hello world\nThis is regular content.";
+		const { body, frontmatter } = parseFrontmatter(input);
+		expect(body).toBe("Hello world\nThis is regular content.");
+		expect(frontmatter).toEqual({});
+	});
+
+	it("preserves body when opening delimiter is present but closing delimiter is missing", () => {
+		const input = "---\nkey: value\nNo closing delimiter here";
+		const { body } = parseFrontmatter(input);
+		expect(body).toBe("---\nkey: value\nNo closing delimiter here");
+	});
+
 	it("returns empty object for empty or comment-only frontmatter", () => {
 		const input = "---\n# just a comment\n---\nBody";
 		const { frontmatter } = parseFrontmatter(input);
@@ -56,5 +71,11 @@ describe("stripFrontmatter", () => {
 	it("returns body when no frontmatter present", () => {
 		const input = "\n  No frontmatter body  \n";
 		expect(stripFrontmatter(input)).toBe("\n  No frontmatter body  \n");
+	});
+
+	it("returns full content unchanged when input has no YAML front block", () => {
+		// Regression: stripFrontmatter must not return empty string for plain content.
+		expect(stripFrontmatter("plain content")).toBe("plain content");
+		expect(stripFrontmatter("line one\nline two")).toBe("line one\nline two");
 	});
 });

@@ -33,6 +33,23 @@ describe("version checks", () => {
 		expect(isNewerPackageVersion("0.70.6", "0.70.5")).toBe(true);
 	});
 
+	it("isNewerPackageVersion returns false when versions are identical", () => {
+		// Regression: using >= instead of > incorrectly treats equal versions as "newer".
+		expect(isNewerPackageVersion("1.0.0", "1.0.0")).toBe(false);
+		expect(isNewerPackageVersion("0.74.0", "0.74.0")).toBe(false);
+		expect(isNewerPackageVersion("2.3.4", "2.3.4")).toBe(false);
+	});
+
+	it("isNewerPackageVersion returns false for older candidate version", () => {
+		expect(isNewerPackageVersion("1.0.0", "2.0.0")).toBe(false);
+		expect(isNewerPackageVersion("1.2.2", "1.2.3")).toBe(false);
+	});
+
+	it("isNewerPackageVersion returns true only for strictly newer candidate version", () => {
+		expect(isNewerPackageVersion("2.0.0", "1.0.0")).toBe(true);
+		expect(isNewerPackageVersion("1.2.4", "1.2.3")).toBe(true);
+	});
+
 	it("returns only newer versions", async () => {
 		const fetchMock = vi.fn(async () => Response.json({ version: "1.2.3" }));
 		vi.stubGlobal("fetch", fetchMock);
