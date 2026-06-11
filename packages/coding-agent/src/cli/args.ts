@@ -115,6 +115,7 @@ export function parseArgs(args: string[]): Args {
 			if (isValidThinkingLevel(level)) {
 				result.thinking = level;
 			} else {
+				result.thinking = "high";
 				result.diagnostics.push({
 					type: "warning",
 					message: `Invalid thinking level "${level}". Valid values: ${VALID_THINKING_LEVELS.join(", ")}`,
@@ -179,7 +180,7 @@ export function parseArgs(args: string[]): Args {
 				}
 			}
 		} else if (arg.startsWith("-") && !arg.startsWith("--")) {
-			result.diagnostics.push({ type: "error", message: `Unknown option: ${arg}` });
+			result.messages.push(arg);
 		} else if (!arg.startsWith("-")) {
 			result.messages.push(arg);
 		}

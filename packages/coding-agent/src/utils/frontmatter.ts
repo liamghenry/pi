@@ -32,7 +32,12 @@ export const parseFrontmatter = <T extends Record<string, unknown> = Record<stri
 	if (!yamlString) {
 		return { frontmatter: {} as T, body };
 	}
-	const parsed = parse(yamlString);
+	let parsed: unknown;
+	try {
+		parsed = parse(yamlString);
+	} catch {
+		parsed = { raw: yamlString };
+	}
 	return { frontmatter: (parsed ?? {}) as T, body };
 };
 

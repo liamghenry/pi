@@ -177,9 +177,9 @@ async function getShellConfig(
 
 function getShellEnv(baseEnv?: NodeJS.ProcessEnv, extraEnv?: Record<string, string>): NodeJS.ProcessEnv {
 	return {
-		...process.env,
 		...baseEnv,
 		...extraEnv,
+		...process.env,
 	};
 }
 

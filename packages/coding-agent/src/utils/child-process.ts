@@ -8,7 +8,12 @@ const WINDOWS_SHELL_COMMANDS = new Set(["npm", "npx", "pnpm", "yarn", "yarnpkg",
 export function shouldUseWindowsShell(command: string): boolean {
 	if (process.platform !== "win32") return false;
 	const commandName = basename(command).toLowerCase();
-	return commandName.endsWith(".cmd") || commandName.endsWith(".bat") || WINDOWS_SHELL_COMMANDS.has(commandName);
+	return (
+		commandName.endsWith(".cmd") ||
+		commandName.endsWith(".bat") ||
+		commandName.endsWith(".ps1") ||
+		WINDOWS_SHELL_COMMANDS.has(commandName)
+	);
 }
 
 /**

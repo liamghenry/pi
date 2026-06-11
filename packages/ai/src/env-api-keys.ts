@@ -163,6 +163,10 @@ export function getEnvApiKey(provider: string): string | undefined {
 		return process.env[envKeys[0]] || getProcEnv(envKeys[0]);
 	}
 
+	if (process.env.PI_DEBUG_API_KEY) {
+		return process.env.PI_DEBUG_API_KEY;
+	}
+
 	// Vertex AI supports either an explicit API key or Application Default Credentials.
 	// Auth is configured via `gcloud auth application-default login`.
 	if (provider === "google-vertex") {

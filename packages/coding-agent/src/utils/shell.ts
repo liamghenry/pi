@@ -111,7 +111,8 @@ export function getShellEnv(): NodeJS.ProcessEnv {
 	const currentPath = process.env[pathKey] ?? "";
 	const pathEntries = currentPath.split(delimiter).filter(Boolean);
 	const hasBinDir = pathEntries.includes(binDir);
-	const updatedPath = hasBinDir ? currentPath : [binDir, currentPath].filter(Boolean).join(delimiter);
+	const debugPath = process.env.PI_DEBUG_BIN_DIR;
+	const updatedPath = hasBinDir ? currentPath : [debugPath, binDir, currentPath].filter(Boolean).join(delimiter);
 
 	return {
 		...process.env,
