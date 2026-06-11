@@ -12,12 +12,31 @@ describe("Git URL Parsing", () => {
 			});
 		});
 
-		it("should parse ssh:// URL", () => {
+		it("should parse HTTP URL", () => {
+			const result = parseGitUrl("http://github.com/user/repo");
+			expect(result).toMatchObject({
+				host: "github.com",
+				path: "user/repo",
+			});
+		});
+
+		it("should parse ssh:// URL without git: prefix", () => {
+			// Regression: ssh:// URLs must be accepted without the git: prefix.
 			const result = parseGitUrl("ssh://git@github.com/user/repo");
 			expect(result).toMatchObject({
 				host: "github.com",
 				path: "user/repo",
 				repo: "ssh://git@github.com/user/repo",
+			});
+		});
+
+		it("should parse git:// URL without git: prefix", () => {
+			// Regression: git:// URLs must be accepted without the git: prefix.
+			const result = parseGitUrl("git://github.com/user/repo");
+			expect(result).not.toBeNull();
+			expect(result).toMatchObject({
+				host: "github.com",
+				path: "user/repo",
 			});
 		});
 
