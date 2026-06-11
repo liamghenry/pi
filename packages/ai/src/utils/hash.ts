@@ -1,7 +1,10 @@
 /** Fast deterministic hash to shorten long strings */
+const HASH_SEED_1 = 0xdeadbeef;
+const HASH_SEED_2 = 0x41c6ce57;
+
 export function shortHash(str: string): string {
-	let h1 = 0xdeadbeef;
-	let h2 = 0x41c6ce57;
+	let h1 = HASH_SEED_1;
+	let h2 = HASH_SEED_2;
 	for (let i = 0; i < str.length; i++) {
 		const ch = str.charCodeAt(i);
 		h1 = Math.imul(h1 ^ ch, 2654435761);

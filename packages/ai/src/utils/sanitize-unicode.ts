@@ -18,8 +18,10 @@
  * const unpaired = String.fromCharCode(0xD83D); // high surrogate without low
  * sanitizeSurrogates(`Text ${unpaired} here`) // => "Text  here"
  */
+const UNPAIRED_SURROGATE_PATTERN = /[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]/g;
+
 export function sanitizeSurrogates(text: string): string {
 	// Replace unpaired high surrogates (0xD800-0xDBFF not followed by low surrogate)
 	// Replace unpaired low surrogates (0xDC00-0xDFFF not preceded by high surrogate)
-	return text.replace(/[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]/g, "");
+	return text.replace(UNPAIRED_SURROGATE_PATTERN, "");
 }

@@ -12,6 +12,10 @@ export interface AssistantMessageDiagnostic {
 	details?: Record<string, unknown>;
 }
 
+function createDiagnosticTimestamp(): number {
+	return Date.now();
+}
+
 export function formatThrownValue(value: unknown): string {
 	if (value instanceof Error) return value.message || value.name;
 	if (typeof value === "string") return value;
@@ -34,7 +38,7 @@ export function createAssistantMessageDiagnostic(
 	error: unknown,
 	details?: Record<string, unknown>,
 ): AssistantMessageDiagnostic {
-	return { type, timestamp: Date.now(), error: extractDiagnosticError(error), details };
+	return { type, timestamp: createDiagnosticTimestamp(), error: extractDiagnosticError(error), details };
 }
 
 export function appendAssistantMessageDiagnostic<T extends { diagnostics?: AssistantMessageDiagnostic[] }>(

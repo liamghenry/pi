@@ -24,6 +24,10 @@ function escapeControlCharacter(char: string): string {
 	}
 }
 
+function normalizeStreamingJsonInput(json: string | undefined): string | undefined {
+	return json && json.trim() !== "" ? json : undefined;
+}
+
 /**
  * Repairs malformed JSON string literals by:
  * - escaping raw control characters inside strings
@@ -102,19 +106,20 @@ export function parseJsonWithRepair<T>(json: string): T {
  * @returns Parsed object or empty object if parsing fails
  */
 export function parseStreamingJson<T = Record<string, unknown>>(partialJson: string | undefined): T {
-	if (!partialJson || partialJson.trim() === "") {
+	const jsonInput = normalizeStreamingJsonInput(partialJson);
+	if (!jsonInput) {
 		return {} as T;
 	}
 
 	try {
-		return parseJsonWithRepair<T>(partialJson);
+		return parseJsonWithRepair<T>(jsonInput);
 	} catch {
 		try {
-			const result = partialParse(partialJson);
+			const result = partialParse(jsonInput);
 			return (result ?? {}) as T;
 		} catch {
 			try {
-				const result = partialParse(repairJson(partialJson));
+				const result = partialParse(repairJson(jsonInput));
 				return (result ?? {}) as T;
 			} catch {
 				return {} as T;
