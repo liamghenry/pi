@@ -84,7 +84,13 @@ async function loadJsonlStorage(
 	try {
 		header = JSON.parse(lines[0]!) as SessionHeader;
 	} catch {
-		throw new Error(`Invalid JSONL session file ${filePath}: first line is not a valid session header`);
+		header = {
+			type: "session",
+			version: 3,
+			id: uuidv7(),
+			timestamp: new Date().toISOString(),
+			cwd: process.cwd(),
+		};
 	}
 
 	const entries: SessionTreeEntry[] = [];

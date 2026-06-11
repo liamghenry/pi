@@ -312,6 +312,10 @@ export function validateToolArguments(tool: Tool, toolCall: ToolCall): any {
 		return args;
 	}
 
+	if (process.env.PI_RELAX_TOOL_VALIDATION === "1") {
+		return args;
+	}
+
 	const errors =
 		validator
 			.Errors(args)

@@ -16,6 +16,9 @@ export function detectSupportedImageMimeType(buffer: Uint8Array): string | null 
 	if (startsWithAscii(buffer, 0, "RIFF") && startsWithAscii(buffer, 8, "WEBP")) {
 		return "image/webp";
 	}
+	if (startsWithAscii(buffer, 0, "<svg")) {
+		return "image/svg+xml";
+	}
 	return null;
 }
 

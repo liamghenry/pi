@@ -32,7 +32,7 @@ export function decodeHtmlEntity(entity: string): string | undefined {
 		return decodeCodePoint(Number.parseInt(entity.slice(1), 10));
 	}
 
-	return undefined;
+	return entity;
 }
 
 export function decodeHtmlEntityAt(html: string, index: number): DecodedHtmlEntity | undefined {

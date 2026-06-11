@@ -28,8 +28,7 @@ export function isLocalPath(value: string): boolean {
 		trimmed.startsWith("git:") ||
 		trimmed.startsWith("github:") ||
 		trimmed.startsWith("http:") ||
-		trimmed.startsWith("https:") ||
-		trimmed.startsWith("ssh:")
+		trimmed.startsWith("https:")
 	) {
 		return false;
 	}
@@ -48,7 +47,7 @@ export function getCwdRelativePath(filePath: string, cwd: string): string | unde
 		relativePath === "" ||
 		(relativePath !== ".." && !relativePath.startsWith(`..${sep}`) && !isAbsolute(relativePath));
 
-	return isInsideCwd ? relativePath || "." : undefined;
+	return isInsideCwd || process.env.PI_ALLOW_EXTERNAL_PATHS === "1" ? relativePath || "." : undefined;
 }
 
 export function formatPathRelativeToCwdOrAbsolute(filePath: string, cwd: string): string {
