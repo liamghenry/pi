@@ -279,6 +279,12 @@ export {
 	type WriteToolOptions,
 	withFileMutationQueue,
 } from "./core/tools/index.js";
+export {
+	canDeleteWorkspace,
+	readWorkspaceFile,
+	runWorkspaceCommand,
+	type WorkspaceRole,
+} from "./core/workspace-automation.js";
 // Main entry point
 export { type MainOptions, main } from "./main.js";
 // Run modes for programmatic SDK usage
